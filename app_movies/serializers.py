@@ -16,31 +16,13 @@ class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = [
-            "id",
-            "title",
-            "director",
-            "description",
-            "release_year",
-            "genre",
-            "genre_display",
-            "rating",
-            "rating_count",
-            "created_by",
-            "created_by_username",
-            "str",
-            "created_at",
-            "updated_at",
+            "id","title","director","description","release_year",
+            "genre","genre_display","rating","rating_count","created_by",
+            "created_by_username","str","created_at","updated_at",
         ]
         read_only_fields = [
-            "id",
-            "rating",
-            "rating_count",
-            "created_by",
-            "created_by_username",
-            "genre_display",
-            "str",
-            "created_at",
-            "updated_at",
+            "id","rating","rating_count","created_by","created_by_username",
+            "genre_display","str","created_at","updated_at",
         ]
         extra_kwargs = {
             "title": {
@@ -129,6 +111,8 @@ class MovieSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
+        # dùng để kiểm tra toàn bộ object,
+        # attrs là dictionary chứa dữ liệu đã validate của request.
         """
         Một user không được có hai phim chưa xóa với cùng tiêu đề
         và cùng năm phát hành.

@@ -72,7 +72,6 @@ class Movie( models.Model):
         keep_parents=False,
         hard=False,
     ):
-        """Mặc định xóa mềm; hard=True mới xóa thật khỏi database."""
         if hard:
             return super().delete(
                 using=using,

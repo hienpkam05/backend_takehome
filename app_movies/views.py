@@ -43,36 +43,22 @@ class MovieViewSet(viewsets.ModelViewSet):
     ]
     filterset_class = MovieFilter
     search_fields = [
-        "title",
-        "director",
-        "description",
-        "created_by__username",
+        "title","director",
+        "description","created_by__username",
     ]
     ordering_fields = [
-        "id",
-        "title",
-        "director",
-        "release_year",
-        "rating",
-        "rating_count",
-        "created_at",
-        "updated_at",
+        "id","title","director",
+        "release_year","rating","rating_count",
+        "created_at","updated_at",
     ]
     ordering = ["-created_at"]
 
     def get_queryset(self):
-        """
-        Queryset gốc chỉ lấy phim chưa bị xóa mềm.
-
-        Filter, search và ordering được xử lý bởi filter_backends,
-        không đọc request.query_params thủ công ở đây.
-        """
         return Movie.objects.filter(is_deleted=False).select_related(
             "created_by"
         )
 
     def get_permissions(self):
-        """Chọn permission theo action mà router đang gọi."""
         public_actions = ["list", "retrieve", "top_rated"]
         authenticated_actions = ["create", "rate"]
         owner_actions = ["update", "partial_update", "destroy"]
@@ -89,7 +75,6 @@ class MovieViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):
-        """Public: danh sách có filter, search, ordering, pagination."""
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
 
@@ -101,7 +86,6 @@ class MovieViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
-        """Public: lấy chi tiết một phim chưa bị xóa mềm."""
         movie = self.get_object()
         serializer = self.get_serializer(movie)
         return Response({
@@ -110,7 +94,6 @@ class MovieViewSet(viewsets.ModelViewSet):
             },status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        """Cần JWT; backend tự gán created_by=request.user."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         movie = serializer.save(created_by=request.user)
@@ -121,7 +104,6 @@ class MovieViewSet(viewsets.ModelViewSet):
             },status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
-        """PUT: cần JWT và chỉ chủ phim được cập nhật toàn bộ."""
         movie = self.get_object()
         serializer = self.get_serializer(
             movie,
@@ -137,7 +119,6 @@ class MovieViewSet(viewsets.ModelViewSet):
             },status=status.HTTP_200_OK,)
 
     def partial_update(self, request, *args, **kwargs):
-        """PATCH: cần JWT và chỉ chủ phim được cập nhật một phần."""
         movie = self.get_object()
         serializer = self.get_serializer(
             movie,
@@ -154,7 +135,6 @@ class MovieViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):
-        """DELETE: cần JWT, chỉ chủ phim; gọi model.delete() để xóa mềm."""
         movie = self.get_object()
         movie.delete()
 
@@ -174,7 +154,6 @@ class MovieViewSet(viewsets.ModelViewSet):
     )
     @action(detail=False, methods=["get"], url_path="top-rated")
     def top_rated(self, request):
-        """Public; cho phép kết hợp filter/search trước khi lấy top 10."""
         queryset = self.filter_queryset(self.get_queryset())
         movies = (
             queryset.filter(rating_count__gt=0)
@@ -200,13 +179,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], url_path="rate")
     @transaction.atomic
     def rate(self, request, pk=None):
-        """
-        Cần JWT.
-
-        Mỗi user chỉ có một MovieRating cho một phim. Lần sau gọi API
-        sẽ update điểm cũ nhờ update_or_create(), sau đó tính lại điểm
-        trung bình và tổng số người đánh giá.
-        """
+        
         movie = get_object_or_404(
             self.get_queryset().select_for_update(),
             pk=pk,
@@ -258,4 +231,3 @@ class MovieViewSet(viewsets.ModelViewSet):
                 "average_rating": movie.rating,
                 "rating_count": movie.rating_count,
             },status=status.HTTP_200_OK)
-

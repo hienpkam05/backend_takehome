@@ -249,6 +249,24 @@ def test_filter_backend_filters_year_range(api_client, movie, owner):
 
 
 @pytest.mark.django_db
+def test_filter_backend_filters_exact_year(api_client, movie, owner):
+    Movie.objects.create(
+        title="Different Year Movie",
+        director="Other Director",
+        description="Another movie used for exact year filter tests.",
+        release_year=1990,
+        genre=Movie.GENRE_DRAMA,
+        created_by=owner,
+    )
+
+    response = api_client.get("/api/movies/?year=2014")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 1
+    assert response.data["results"][0]["id"] == movie.id
+
+
+@pytest.mark.django_db
 def test_top_rated_returns_at_most_10_sorted_movies(api_client, owner):
     for index in range(12):
         Movie.objects.create(

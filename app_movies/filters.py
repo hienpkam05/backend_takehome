@@ -9,6 +9,12 @@ class MovieFilter(django_filters.FilterSet):
         field_name="genre",
         choices=Movie.GENRE_CHOICES,
     )
+    release_year = django_filters.NumberFilter(
+        field_name="release_year",
+    )
+    year = django_filters.NumberFilter(
+        field_name="release_year",
+    )
     min_year = django_filters.NumberFilter(
         field_name="release_year",
         lookup_expr="gte",
@@ -38,15 +44,15 @@ class MovieFilter(django_filters.FilterSet):
 
     class Meta:
         model = Movie
-        fields = ["genre", "created_by"]
+        fields = ["genre", "release_year", "year", "created_by"]
 
     def filter_has_rating(self, queryset, name, value):
         if value is True:
-            return queryset.filter(rating_count__gt=0)
+            return queryset.filter(rating_count__gt=0) 
         if value is False:
             return queryset.filter(rating_count=0)
         return queryset
-
+    
     def filter_queryset(self, queryset):
         """Kiểm tra min/max rồi mới áp dụng filter vào queryset."""
         min_year = self.form.cleaned_data.get("min_year")
