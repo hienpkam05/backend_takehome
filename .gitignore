@@ -1,0 +1,45 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+venv*/
+.venv/
+env/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Django/local runtime files
+db.sqlite3
+test.sqlite3
+staticfiles/
+media/
+
+# Test/coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Logs
+*.log
+logs/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker/local override files
+docker-compose.override.yml
