@@ -66,12 +66,9 @@ class Movie( models.Model):
 
     def __str__(self):
         return self.title
-    def delete(
-        self,
-        using=None,
-        keep_parents=False,
-        hard=False,
-    ):
+    def delete(self,using=None,
+        keep_parents=False,hard=False,):
+        
         if hard:
             return super().delete(
                 using=using,

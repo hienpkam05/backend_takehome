@@ -1,0 +1,597 @@
+{
+  "info": {
+    "name": "Movies API",
+    "description": "Postman collection for the Django Movies API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "movie_id",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login - Get JWT Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nguoidung_1\",\n  \"password\": \"Hien12345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/token/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "token",
+                ""
+              ]
+            },
+            "description": "Returns access and refresh tokens. Copy access into collection variable access_token."
+          }
+        },
+        {
+          "name": "Refresh JWT Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/token/refresh/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "token",
+                "refresh",
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "List Movies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Movies - Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/?page=1&page_size=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Movies - Filter Genre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/?genre=action",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "action"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Movies - Filter Exact Year",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/?release_year=2010",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "release_year",
+                  "value": "2010"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Movies - Filter Year Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/?min_year=2000&max_year=2020",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "min_year",
+                  "value": "2000"
+                },
+                {
+                  "key": "max_year",
+                  "value": "2020"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Movies - Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/?search=nolan",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "nolan"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Movies - Ordering",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/?ordering=-rating",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "ordering",
+                  "value": "-rating"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Movie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Inception\",\n  \"director\": \"Christopher Nolan\",\n  \"description\": \"A movie about nested dreams and reality.\",\n  \"release_year\": 2010,\n  \"genre\": \"sci_fi\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/movies/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Retrieve Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/{{movie_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "{{movie_id}}",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Movie - PUT",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Inception Updated\",\n  \"director\": \"Christopher Nolan\",\n  \"description\": \"Updated description for this movie.\",\n  \"release_year\": 2010,\n  \"genre\": \"sci_fi\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/movies/{{movie_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "{{movie_id}}",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Movie - PATCH",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Inception Patched\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/movies/{{movie_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "{{movie_id}}",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Soft Delete Movie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/{{movie_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "{{movie_id}}",
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ratings",
+      "item": [
+        {
+          "name": "Rate Movie",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 9\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/movies/{{movie_id}}/rate/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "{{movie_id}}",
+                "rate",
+                ""
+              ]
+            },
+            "description": "Calling this again with the same user updates the old rating."
+          }
+        },
+        {
+          "name": "Rate Movie - Invalid Rating",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 11\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/movies/{{movie_id}}/rate/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "{{movie_id}}",
+                "rate",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Top Rated Movies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/top-rated/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "top-rated",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Top Rated Movies - With Filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/movies/top-rated/?genre=sci_fi&min_rating=8",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "top-rated",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "sci_fi"
+                },
+                {
+                  "key": "min_rating",
+                  "value": "8"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Docs",
+      "item": [
+        {
+          "name": "OpenAPI Schema",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/schema/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "schema",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Swagger UI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/docs/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "docs",
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

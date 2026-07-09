@@ -41,6 +41,8 @@ class MovieViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
+    # Nói với DjangoFilterBackend rằng filter 
+    # chi tiết nằm trong class MovieFilter.
     filterset_class = MovieFilter
     search_fields = [
         "title","director",
@@ -77,7 +79,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
-
+        
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
@@ -101,6 +103,7 @@ class MovieViewSet(viewsets.ModelViewSet):
         return Response({
                 "message": "Tạo phim mới thành công.",
                 "data": self.get_serializer(movie).data,
+                
             },status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):

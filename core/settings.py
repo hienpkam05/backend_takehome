@@ -108,10 +108,9 @@ DATABASES = {
             "postgresql://movies_user:123456@localhost:5432/movies_db",
         ),
         conn_max_age=0,
-        #nghĩa là không giữ kết nối database lâu dài.
     )
 }
-
+# khi chạy pytest
 if any("pytest" in arg for arg in sys.argv) or "PYTEST_CURRENT_TEST" in os.environ:
     DATABASES = {
         "default": {

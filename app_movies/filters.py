@@ -1,6 +1,5 @@
 import django_filters
 from rest_framework.exceptions import ValidationError
-
 from .models import Movie
 
 
@@ -38,20 +37,20 @@ class MovieFilter(django_filters.FilterSet):
         field_name="created_by__username",
         lookup_expr="iexact",
     )
-    has_rating = django_filters.BooleanFilter(
-        method="filter_has_rating",
-    )
+    # has_rating = django_filters.BooleanFilter(
+    #     method="filter_has_rating",
+    # )
 
     class Meta:
         model = Movie
         fields = ["genre", "release_year", "year", "created_by"]
 
-    def filter_has_rating(self, queryset, name, value):
-        if value is True:
-            return queryset.filter(rating_count__gt=0) 
-        if value is False:
-            return queryset.filter(rating_count=0)
-        return queryset
+    # def filter_has_rating(self, queryset, name, value):
+    #     if value is True:
+    #         return queryset.filter(rating_count__gt=0) 
+    #     if value is False:
+    #         return queryset.filter(rating_count=0)
+    #     return queryset
     
     def filter_queryset(self, queryset):
         """Kiểm tra min/max rồi mới áp dụng filter vào queryset."""
